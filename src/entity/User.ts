@@ -1,29 +1,36 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
-import { ObjectType, Field, ID } from 'type-graphql'
+// import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
+import { prop, getModelForClass } from '@typegoose/typegoose'
+import { ObjectId } from 'mongodb'
+import {
+  ObjectType,
+  Field,
+  ID,
+  // Root
+} from 'type-graphql'
 
 @ObjectType()
-@Entity()
-export class User extends BaseEntity {
+export class User {
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  id: number
+  // @PrimaryGeneratedColumn()
+  // id: number
+  readonly id: string
 
-  // @Field()
-  // @Column()
-  // firstName: string
-
-  // @Field()
-  // @Column()
-  // lastName: string
+  // @Field(() => ID)
+  // @PrimaryGeneratedColumn()
+  // id: number
+  readonly _id: ObjectId
 
   @Field()
-  @Column('text', { unique: true })
+  // @Column('text', { unique: true })
+  @prop({ unique: true })
   email: string
 
-  @Column()
+  // @Column()
+  @prop()
   password: string
 
-  @Column('int', { default: 0 })
+  // @Column('int', { default: 0 })
+  @prop({ default: 0 })
   tokenVersion: number
 
   // @Field()
@@ -31,3 +38,5 @@ export class User extends BaseEntity {
   //   return `${parent.firstName} ${parent.lastName}`
   // }
 }
+
+export const UserModel = getModelForClass(User)

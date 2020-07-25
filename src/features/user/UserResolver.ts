@@ -8,7 +8,8 @@ import {
 } from 'type-graphql'
 import { hash, compare } from 'bcryptjs'
 
-import { User } from '../../entity/User'
+// import { User } from '../../entity/User'
+import { User, UserModel } from '../../entity/User'
 import { RegisterInput } from './register/RegisterInput'
 import { LoginResponse } from './login/LoginResponse'
 import { createAccessToken, createRefreshToken } from './auth'
@@ -25,23 +26,22 @@ export class UserResolver {
 
   @Query(() => [User])
   async users(): Promise<User[]> {
-    return await User.find()
+    return await UserModel.find()
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => User)
   async register(
     @Arg('data')
     { email, password }: RegisterInput
-  ): Promise<boolean> {
+  ): Promise<User> {
     const hashPassword = await hash(password, 12)
 
-    try {
-      await User.insert({ email, password: hashPassword })
-    } catch (err) {
-      return false
-    }
-
-    return true
+    const user = new UserModel({
+      email,
+      password: hashPassword,
+    })
+    await user.save()
+    return user
   }
 
   @Mutation(() => LoginResponse)
@@ -50,7 +50,7 @@ export class UserResolver {
     @Arg('password') password: string,
     @Ctx() { res }: MyContext
   ): Promise<LoginResponse> {
-    const user = await User.findOne({ email })
+    const user = await UserModel.findOne({ email })
 
     if (!user) throw new Error('User not found')
 
@@ -58,8 +58,6 @@ export class UserResolver {
 
     if (!valid) throw new Error('Wrong password')
 
-    // const refreshToken = createRefreshToken(user)
-    // res.cookie('cid', refreshToken, { httpOnly: true })
     sendRefreshToken(res, createRefreshToken(user))
 
     return { accessToken: createAccessToken(user) }
