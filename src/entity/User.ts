@@ -1,42 +1,29 @@
 // import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
 import { prop, getModelForClass } from '@typegoose/typegoose'
 import { ObjectId } from 'mongodb'
-import {
-  ObjectType,
-  Field,
-  ID,
-  // Root
-} from 'type-graphql'
+import { ObjectType, Field, ID, Root } from 'type-graphql'
 
 @ObjectType()
 export class User {
   @Field(() => ID)
-  // @PrimaryGeneratedColumn()
-  // id: number
   readonly id: string
 
-  // @Field(() => ID)
-  // @PrimaryGeneratedColumn()
-  // id: number
   readonly _id: ObjectId
 
   @Field()
-  // @Column('text', { unique: true })
-  @prop({ unique: true })
+  @prop({ required: true, unique: true })
   email: string
 
-  // @Column()
-  @prop()
+  @prop({ required: true })
   password: string
 
-  // @Column('int', { default: 0 })
   @prop({ default: 0 })
   tokenVersion: number
 
-  // @Field()
-  // name(@Root() parent: User): string {
-  //   return `${parent.firstName} ${parent.lastName}`
-  // }
+  @Field()
+  name(@Root() parent: User): string {
+    return `${parent.email}`
+  }
 }
 
 export const UserModel = getModelForClass(User)

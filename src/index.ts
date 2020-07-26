@@ -9,6 +9,7 @@ import cookieParser from 'cookie-parser'
 // import { verify } from 'jsonwebtoken'
 
 import { UserResolver } from './features/user/UserResolver'
+import { RecipeResolver } from './features/recipe/RecipeResolver'
 // import { User } from './entity/User'
 // import { createAccessToken, createRefreshToken } from './features/user/auth'
 // import { sendRefreshToken } from './features/user/sendRefreshToken'
@@ -48,7 +49,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver],
+      resolvers: [UserResolver, RecipeResolver],
     }),
     context: ({ req, res }) => ({ req, res }),
   })
