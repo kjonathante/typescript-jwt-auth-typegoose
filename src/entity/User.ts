@@ -10,14 +10,7 @@ import {
 
 @ObjectType()
 export class User {
-  @Field(() => ID)
-  // @PrimaryGeneratedColumn()
-  // id: number
-  readonly id: string
-
-  // @Field(() => ID)
-  // @PrimaryGeneratedColumn()
-  // id: number
+  @Field(() => ID, { name: 'id' })
   readonly _id: ObjectId
 
   @Field()

@@ -8,7 +8,7 @@ import { buildSchema } from 'type-graphql'
 import cookieParser from 'cookie-parser'
 // import { verify } from 'jsonwebtoken'
 
-import { UserResolver } from './features/user/UserResolver'
+import { UserResolver } from './feature/user/UserResolver'
 // import { User } from './entity/User'
 // import { createAccessToken, createRefreshToken } from './features/user/auth'
 // import { sendRefreshToken } from './features/user/sendRefreshToken'

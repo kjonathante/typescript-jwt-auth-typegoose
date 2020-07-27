@@ -13,17 +13,12 @@ import { User, UserModel } from '../../entity/User'
 import { RegisterInput } from './register/RegisterInput'
 import { LoginResponse } from './login/LoginResponse'
 import { createAccessToken, createRefreshToken } from './auth'
-import { MyContext } from '../../types/MyContext'
+import { AppContext } from '../../type/AppContext'
 import { isAuth } from './isAuth'
 import { sendRefreshToken } from './sendRefreshToken'
 
 @Resolver()
 export class UserResolver {
-  @Query(() => String)
-  hello(): string {
-    return 'Hello World'
-  }
-
   @Query(() => [User])
   async users(): Promise<User[]> {
     return await UserModel.find()
@@ -48,7 +43,7 @@ export class UserResolver {
   async login(
     @Arg('email') email: string,
     @Arg('password') password: string,
-    @Ctx() { res }: MyContext
+    @Ctx() { res }: AppContext
   ): Promise<LoginResponse> {
     const user = await UserModel.findOne({ email })
 
@@ -65,7 +60,7 @@ export class UserResolver {
 
   @Query(() => String)
   @UseMiddleware(isAuth)
-  async bye(@Ctx() { payload }: MyContext): Promise<string> {
+  async bye(@Ctx() { payload }: AppContext): Promise<string> {
     return `your id is ${payload.userId}`
   }
 }
