@@ -2,13 +2,14 @@ import 'dotenv/config'
 import 'reflect-metadata'
 import express from 'express'
 // import { createConnection } from 'typeorm'
-import { connect } from 'mongoose'
+import { connect, set } from 'mongoose'
 import { ApolloServer } from 'apollo-server-express'
 import { buildSchema } from 'type-graphql'
 import cookieParser from 'cookie-parser'
 // import { verify } from 'jsonwebtoken'
 
 import { UserResolver } from './feature/user/UserResolver'
+import { RecipeResolver } from './feature/recipe/RecipeResolver'
 // import { User } from './entity/User'
 // import { createAccessToken, createRefreshToken } from './features/user/auth'
 // import { sendRefreshToken } from './features/user/sendRefreshToken'
@@ -45,10 +46,11 @@ const main = async () => {
 
   // await createConnection()
   await connect(process.env.MONGO_DB_URL, { useNewUrlParser: true })
+  set('debug', true)
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver],
+      resolvers: [UserResolver, RecipeResolver],
     }),
     context: ({ req, res }) => ({ req, res }),
   })
