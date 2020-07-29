@@ -1,5 +1,5 @@
 // import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
-import { prop, getModelForClass } from '@typegoose/typegoose'
+import { prop, getModelForClass, defaultClasses } from '@typegoose/typegoose'
 import { ObjectId } from 'mongodb'
 import {
   ObjectType,
@@ -9,7 +9,7 @@ import {
 } from 'type-graphql'
 
 @ObjectType()
-export class User {
+export class User extends defaultClasses.TimeStamps {
   @Field(() => ID, { name: 'id' })
   readonly _id: ObjectId
 
@@ -26,6 +26,11 @@ export class User {
   @prop({ default: 0 })
   tokenVersion: number
 
+  @Field()
+  createdAt: Date
+
+  @Field()
+  updatedAt: Date
   // @Field()
   // name(@Root() parent: User): string {
   //   return `${parent.firstName} ${parent.lastName}`
