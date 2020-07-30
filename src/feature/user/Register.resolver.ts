@@ -19,7 +19,7 @@ export class RegisterResolver {
     })
     await user.save()
 
-    createConfirmationUrl((user._id as unknown) as string)
+    createConfirmationUrl(user._id)
 
     return user
   }

@@ -1,12 +1,9 @@
-import { prop, getModelForClass, defaultClasses } from '@typegoose/typegoose'
-import { ObjectId } from 'mongodb'
-import { ObjectType, Field, ID } from 'type-graphql'
+import { prop, getModelForClass } from '@typegoose/typegoose'
+import { ObjectType, Field } from 'type-graphql'
+import { Base } from './Base'
 
 @ObjectType()
-export class User extends defaultClasses.TimeStamps {
-  @Field(() => ID, { name: 'id' })
-  readonly _id: ObjectId
-
+export class User extends Base {
   @Field()
   @prop({ unique: true })
   email: string
@@ -19,12 +16,6 @@ export class User extends defaultClasses.TimeStamps {
 
   @prop({ default: false })
   confirmed: boolean
-
-  @Field()
-  createdAt: Date
-
-  @Field()
-  updatedAt: Date
 }
 
 export const UserModel = getModelForClass(User)
